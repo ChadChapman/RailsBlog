@@ -8,15 +8,39 @@ class ArticlesController < ApplicationController
 	end
 
 	def new
+		@article = Article.new
 	end
 
+	def edit
+		@article = Article.find(params[:id])
+	end
 	def create
 		@article = Article.new(article_params)
 
-		@article.save
-		redirect_to @article
+		if @article.save
+			redirect_to @article
+		else
+			render 'new'
+		end
 	#below is the previous method from tutorial
 	#render plain: params[:article].inspect
+	end
+
+	def update
+		@article = Article.find(params[:id])
+
+		if @article.update(article_params)
+			redirect_to @article
+		else
+			render 'edit'
+		end
+	end
+
+	def destroy
+		@article = Article.find(params[:id])
+		@article.destroy
+
+		redirect_to articles_path
 	end
 
 	private
@@ -24,3 +48,5 @@ class ArticlesController < ApplicationController
 			params.require(:article).permit(:title, :text)
 		end
 end
+#this one below got added because of an error
+
